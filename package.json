@@ -11,6 +11,7 @@
     "predev": "node aspnetcore-https.js"
   },
   "dependencies": {
+    "marked": "^14.1.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   },
