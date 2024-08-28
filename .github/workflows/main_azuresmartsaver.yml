@@ -11,7 +11,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     steps:
       - uses: actions/checkout@v4
@@ -26,15 +26,12 @@ jobs:
           npm install
           npm run build --if-present
           npm run test --if-present
-
-      - name: Zip artifact for deployment
-        run: zip release.zip ./* -r
-
+      
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
           name: node-app
-          path: release.zip
+          path: .
 
   deploy:
     runs-on: ubuntu-latest
@@ -50,20 +47,17 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: node-app
-
-      - name: Unzip artifact for deployment
-        run: unzip release.zip
       
       - name: Login to Azure
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_37A614E841D945BA9659EB02D45E534B }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_D0537269DA9A40AF85FA50517EA87C11 }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_348F9A58D33246979E4CB4CD08AC6CAA }}
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_822493FDD9F24AAD89F5D8FF5B7356F2 }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_41A35047EF2244109C027AA66776D7B3 }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_19F2B7D7C8CA4AB7B21F96AF5198E647 }}
 
       - name: 'Deploy to Azure Web App'
-        id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
+        id: deploy-to-webapp
         with:
           app-name: 'azuresmartsaver'
           slot-name: 'Production'
