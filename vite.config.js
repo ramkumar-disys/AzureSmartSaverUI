@@ -1,5 +1,4 @@
 import { fileURLToPath, URL } from 'node:url';
-
 import { defineConfig } from 'vite';
 import plugin from '@vitejs/plugin-react';
 import fs from 'fs';
@@ -14,15 +13,15 @@ const certificateArg = process.argv.map(arg => arg.match(/--name=(?<value>.+)/i)
 const certificateName = certificateArg ? certificateArg.groups.value : "AzureCostOptimizerUI";
 
 if (!certificateName) {
-    console.error('Invalid certificate name. Run this script in the context of an npm/yarn script or pass --name=<<app>> explicitly.')
+    console.error('Invalid certificate name. Run this script in the context of an npm/yarn script or pass --name=<<app>> explicitly.');
     process.exit(-1);
 }
 
 const certFilePath = path.join(baseFolder, `${certificateName}.pem`);
 const keyFilePath = path.join(baseFolder, `${certificateName}.key`);
 
-// https://vitejs.dev/config/
 export default defineConfig({
+    base: './', // Adjust this if your app is deployed in a subdirectory or to the root
     plugins: [plugin()],
     resolve: {
         alias: {
@@ -41,5 +40,9 @@ export default defineConfig({
             key: fs.readFileSync(keyFilePath),
             cert: fs.readFileSync(certFilePath),
         }
+    },
+    build: {
+        outDir: 'dist', // Ensures build output goes to the 'dist' directory
+        sourcemap: true, // Optional: Helps with debugging in production
     }
-})
+});
